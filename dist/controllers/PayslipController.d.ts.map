@@ -1,0 +1,1 @@
+{"version":3,"file":"PayslipController.d.ts","sourceRoot":"","sources":["../../src/controllers/PayslipController.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAQjD,qBAAa,iBAAiB;WACb,MAAM,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ;WAgClC,QAAQ,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ;CAoBpD"}

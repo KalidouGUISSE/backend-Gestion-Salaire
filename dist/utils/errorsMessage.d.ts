@@ -1,0 +1,33 @@
+export declare const ErreurMessages: {
+    missingPassword: string;
+    missingPromoName: string;
+    profileNotFound: string;
+    promoNotFound: string;
+    missingReferentielName: string;
+    nameTooShort: string;
+    nameTooLong: string;
+    invalidDescription: string;
+    descriptionTooLong: string;
+    missingProfilSortie: string;
+    missingNiveauName: string;
+    missingUserName: string;
+    invalidEmail: string;
+    missingProfilId: string;
+    invalidProfilSortieId: string;
+    missingTagName: string;
+    tagNameTooShort: string;
+    tagNameTooLong: string;
+    missingCompetenceName: string;
+    EmailAndPassword: string;
+    IVALID: string;
+    NOREFRESHTOKEN: string;
+    USERINVALID: string;
+    REFRESHTOKENINVALID: string;
+    TOKEN_REQUIRED: string;
+    TOKEN_INVALID: string;
+    ACCESS_DENIED: string;
+    SERVER_ERROR: string;
+    BAD_REQUEST: string;
+    NOT_FOUND: string;
+};
+//# sourceMappingURL=errorsMessage.d.ts.map

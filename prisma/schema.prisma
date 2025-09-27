@@ -1,0 +1,237 @@
+// schema.prisma
+// Provider: MySQL (modifiez l'url dans .env)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CASHIER
+  EMPLOYEE
+}
+
+enum ContractType {
+  JOURNALIER
+  FIXE
+  HONORAIRE
+}
+
+enum PayRunType {
+  MONTHLY
+  WEEKLY
+  DAILY
+}
+
+enum PayRunStatus {
+  DRAFT
+  APPROVED
+  CLOSED
+}
+
+enum PayslipStatus {
+  PENDING
+  PARTIAL
+  PAID
+  LOCKED
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  ORANGE_MONEY
+  WAVE
+  OTHER
+}
+
+model Company {
+  id            Int        @id @default(autoincrement())
+  name          String
+  logo          String?    // chemin ou url
+  address       String?
+  currency      String     @default("XOF")
+  payPeriodType PayRunType @default(MONTHLY)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  isActive      Boolean    @default(true)
+
+  users         User[]
+  employees     Employee[]
+  payRuns       PayRun[]
+  payments      Payment[]
+
+  @@map("companies")
+  @@index([name])
+  Attendance Attendance[]
+  Document Document[]
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  fullName    String?
+  role        Role     @default(ADMIN)
+  // si null -> super-admin (accès multi-entreprises)
+  companyId   Int?     
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+
+  // actions
+  createdPayRuns PayRun[] @relation("creator")
+  approvedPayRuns PayRun[] @relation("approver")
+
+  @@map("users")
+  @@index([companyId])
+  Payment Payment[]
+}
+
+model Employee {
+  id             Int          @id @default(autoincrement())
+  companyId      Int
+  company        Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  firstName      String
+  lastName       String
+  fullName       String?
+  email          String? 
+  phone          String?
+  position       String?
+  contractType   ContractType
+  // salaire mensuel pour FIXE/HONORAIRE, taux/jour pour JOURNALIER
+  salary         Decimal      @db.Decimal(12,2) @default(0)
+  bankAccount    String?
+  bankName       String?
+  taxIdentifier  String?      // NIF or equivalent
+  hireDate       DateTime?
+  endDate        DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  payslips       Payslip[]
+  attendances    Attendance[]
+
+  @@map("employees")
+  @@index([companyId])
+  @@index([contractType])
+}
+
+model PayRun {
+  id            Int         @id @default(autoincrement())
+  companyId     Int
+  company       Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type          PayRunType
+  periodStart   DateTime
+  periodEnd     DateTime
+  status        PayRunStatus @default(DRAFT)
+  notes         String?
+  createdById   Int?
+  createdBy     User?        @relation("creator", fields: [createdById], references: [id], onDelete: SetNull)
+  approvedById  Int?
+  approvedBy    User?        @relation("approver", fields: [approvedById], references: [id], onDelete: SetNull)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // totaux calculés (peuvent être recalculés à chaque changement)
+  totalGross    Decimal      @db.Decimal(14,2) @default(0)
+  totalDeductions Decimal    @db.Decimal(14,2) @default(0)
+  totalNet      Decimal      @db.Decimal(14,2) @default(0)
+  totalPaid     Decimal      @db.Decimal(14,2) @default(0)
+
+  payslips      Payslip[]
+
+  @@map("pay_runs")
+  @@index([companyId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+}
+
+model Payslip {
+  id             Int          @id @default(autoincrement())
+  payRunId       Int
+  payRun         PayRun       @relation(fields: [payRunId], references: [id], onDelete: Cascade)
+  employeeId     Int
+  employee       Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  // montants
+  gross          Decimal      @db.Decimal(12,2) @default(0)
+  deductions     Decimal      @db.Decimal(12,2) @default(0)
+  netPayable     Decimal      @db.Decimal(12,2) @default(0)
+  paidAmount     Decimal      @db.Decimal(12,2) @default(0)
+  status         PayslipStatus @default(PENDING)
+  // verrouillage: true si le bulletin est verrouillé (après approbation)
+  locked         Boolean      @default(false)
+  // chemin vers PDF éventuellement généré
+  pdfPath        String?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  payments       Payment[]
+
+  @@map("payslips")
+  @@index([payRunId])
+  @@index([employeeId])
+  @@index([status])
+}
+
+model Payment {
+  id           Int          @id @default(autoincrement())
+  companyId    Int
+  company      Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  payslipId    Int?         // paiement lié à un bulletin (peut être null si paiement global)
+  payslip      Payslip?     @relation(fields: [payslipId], references: [id], onDelete: SetNull)
+  amount       Decimal      @db.Decimal(12,2)
+  method       PaymentMethod
+  reference    String?      // numéro de transaction, référence OM, etc.
+  receiptPath  String?      // chemin du PDF reçu
+  paidById     Int?         
+  paidBy       User?        @relation(fields: [paidById], references: [id], onDelete: SetNull)
+  paidAt       DateTime     @default(now())
+  createdAt    DateTime     @default(now())
+  notes        String?
+
+  @@map("payments")
+  @@index([companyId])
+  @@index([payslipId])
+  @@index([paidAt])
+}
+
+/// émargements / feuilles de présence (utile pour journaliers)
+model Attendance {
+  id          Int       @id @default(autoincrement())
+  employeeId  Int
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  companyId   Int
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  date        DateTime
+  present     Boolean   @default(true)
+  hoursWorked Decimal   @db.Decimal(6,2) @default(0) // optionnel
+  note        String?
+  createdAt   DateTime  @default(now())
+
+  @@map("attendances")
+  @@index([employeeId, date])
+  @@index([companyId, date])
+  @@unique([employeeId, date]) // une seule entrée par jour par employé
+}
+
+model Document {
+  id         Int      @id @default(autoincrement())
+  companyId  Int
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type       String   // ex: "reçu", "bulletin", "facture", "liste_paiements"
+  path       String   // chemin ou url du fichier (pdf)
+  meta       Json?    // méta-data (ex: period, payslipId etc.)
+  createdAt  DateTime @default(now())
+
+  @@map("documents")
+  @@index([companyId])
+  @@index([type])
+}
