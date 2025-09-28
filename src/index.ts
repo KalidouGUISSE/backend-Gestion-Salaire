@@ -15,16 +15,16 @@ import DashboardRoute from "./routes/DashboardRoute.js";
 dotenv.config();
 
 const app = express();
+
+// Autoriser ton frontend
+app.use(cors({
+    origin: 'http://localhost:5173', // <-- l'URL de ton frontend React
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // <-- autoriser toutes les méthodes que tu utilises
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Middlewares
 app.use(express.json()); // JSON parser
-app.use(cors({
-    origin: 'http://localhost:5173', // front React
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-})); 
-// app.use(cors({
-//     origin: 'http://localhost:5173',
-// }));       
 
 // Routes
 app.use('/auth', AuthRoute);
