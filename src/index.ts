@@ -17,14 +17,14 @@ dotenv.config();
 const app = express();
 // Middlewares
 app.use(express.json()); // JSON parser
-// app.use(cors({
-//     origin: 'http://localhost:5173', // front React
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     credentials: true
-// })); 
 app.use(cors({
-    origin: 'http://localhost:5173',
-}));       
+    origin: 'http://localhost:5173', // front React
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+})); 
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+// }));       
 
 // Routes
 app.use('/auth', AuthRoute);
