@@ -1,13 +1,14 @@
 import { z } from "zod";
 export declare const CreatePayRunSchema: z.ZodObject<{
-    companyId: z.ZodNumber;
+    companyId: z.ZodOptional<z.ZodNumber>;
+    title: z.ZodOptional<z.ZodString>;
     type: z.ZodEnum<{
         MONTHLY: "MONTHLY";
         WEEKLY: "WEEKLY";
         DAILY: "DAILY";
     }>;
-    periodStart: z.ZodString;
-    periodEnd: z.ZodString;
+    periodStart: z.ZodPipe<z.ZodString, z.ZodTransform<string, string>>;
+    periodEnd: z.ZodPipe<z.ZodString, z.ZodTransform<string, string>>;
     notes: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
 export declare const UpdatePayRunSchema: z.ZodObject<{
@@ -18,8 +19,8 @@ export declare const ApprovePayRunSchema: z.ZodObject<{
 }, z.core.$strip>;
 export declare const PayRunFilterSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<{
-        DRAFT: "DRAFT";
         APPROVED: "APPROVED";
+        DRAFT: "DRAFT";
         CLOSED: "CLOSED";
     }>>;
     type: z.ZodOptional<z.ZodEnum<{

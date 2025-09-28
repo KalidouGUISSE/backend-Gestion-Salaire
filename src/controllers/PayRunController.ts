@@ -61,6 +61,9 @@ export class PayRunController {
                 data.companyId = user.companyId;
             }
 
+            console.log('{{{{{{{{{{');
+            console.log(data);
+            
             const payRun = await service.createPayRun(data, user.id);
             res.status(HttpStatus.CREATED).json(formatSuccess(payRun, HttpStatus.CREATED, "PayRun créé avec succès"));
         } catch (error: any) {

@@ -25,7 +25,15 @@ export class PayRunService {
         await this.repo.delete(id);
     }
     async approvePayRun(id, approvedById) {
-        return this.repo.update(id, { status: 'APPROVED', approvedById });
+        const payRun = await this.repo.update(id, { status: 'APPROVED', approvedById });
+        // Lock all payslips for this pay run
+        await prisma.payslip.updateMany({
+            where: { payRunId: id },
+            data: { locked: true },
+        });
+        // Recalculate totals in case of any changes
+        await this.calculateTotals(id);
+        return payRun;
     }
     async generatePayslips(payRunId) {
         const payRun = await this.repo.findById(payRunId);
@@ -35,8 +43,27 @@ export class PayRunService {
         const employees = await this.employeeService.getActiveEmployeesByCompany(payRun.companyId);
         const payslips = [];
         for (const employee of employees) {
-            let gross = employee.salary.toNumber(); // assuming salary is monthly
-            // Deductions: 10% by default
+            let gross;
+            if (employee.contractType === 'JOURNALIER') {
+                // Count days worked from attendances in the period
+                const daysWorked = await prisma.attendance.count({
+                    where: {
+                        employeeId: employee.id,
+                        companyId: payRun.companyId,
+                        date: {
+                            gte: payRun.periodStart,
+                            lte: payRun.periodEnd,
+                        },
+                        present: true,
+                    },
+                });
+                gross = employee.salary.toNumber() * daysWorked;
+            }
+            else {
+                // For FIXE and HONORAIRE, use full salary (assuming monthly base)
+                gross = employee.salary.toNumber();
+            }
+            // Deductions: 10% placeholder (can be customized later)
             const deductions = gross * 0.1;
             const net = gross - deductions;
             payslips.push({

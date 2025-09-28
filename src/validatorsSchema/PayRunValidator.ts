@@ -1,10 +1,11 @@
 import { z } from "zod";
 
 export const CreatePayRunSchema = z.object({
-    companyId: z.number().int().positive("ID entreprise invalide"),
+    companyId: z.number().int().positive("ID entreprise invalide").optional(),
+    title: z.string().optional(),
     type: z.enum(["MONTHLY", "WEEKLY", "DAILY"]),
-    periodStart: z.string().datetime(),
-    periodEnd: z.string().datetime(),
+    periodStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format de date invalide (YYYY-MM-DD attendu)").transform((date) => new Date(date + 'T00:00:00.000Z').toISOString()),
+    periodEnd: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format de date invalide (YYYY-MM-DD attendu)").transform((date) => new Date(date + 'T23:59:59.999Z').toISOString()),
     notes: z.string().optional(),
 });
 

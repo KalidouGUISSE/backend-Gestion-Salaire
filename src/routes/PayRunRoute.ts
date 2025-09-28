@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { PayRunController } from "../controllers/PayRunController.js";
+import { PayslipController } from "../controllers/PayslipController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
@@ -14,5 +15,9 @@ router.put("/:id", PayRunController.update);
 router.delete("/:id", PayRunController.delete);
 router.patch("/:id/approve", PayRunController.approve);
 router.post("/:id/generate-payslips", PayRunController.generatePayslips);
+
+// Payslips routes under payruns
+router.get("/:payRunId/payslips", PayslipController.getAll);
+router.post("/:payRunId/payslips", PayslipController.create);
 
 export default router;
