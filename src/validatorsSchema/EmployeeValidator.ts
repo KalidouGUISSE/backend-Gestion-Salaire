@@ -25,12 +25,21 @@ export type CreateEmployeeInput = Omit<
 // export const UpdateEmployeeSchema = CreateEmployeeSchema.partial().omit({ companyId: true });
 export const UpdateEmployeeSchema = CreateEmployeeSchema.partial();
 
+// export const EmployeeFilterSchema = z.object({
+//     isActive: z.boolean().optional(),
+//     contractType: z.enum(["JOURNALIER", "FIXE", "HONORAIRE"]).optional(),
+//     position: z.string().optional(),
+//     page: z.number().int().positive().default(1),
+//     limit: z.number().int().positive().max(100).default(10),
+// });
+
 export const EmployeeFilterSchema = z.object({
-    isActive: z.boolean().optional(),
+    isActive: z.preprocess((val) => val === "true" ? true : val === "false" ? false : val, z.boolean().optional()),
     contractType: z.enum(["JOURNALIER", "FIXE", "HONORAIRE"]).optional(),
     position: z.string().optional(),
-    page: z.number().int().positive().default(1),
-    limit: z.number().int().positive().max(100).default(10),
+    fullName: z.string().optional(),
+    page: z.preprocess((val) => Number(val), z.number().int().positive().default(1)),
+    limit: z.preprocess((val) => Number(val), z.number().int().positive().max(100).default(10)),
 });
 
 export const ActivateEmployeeSchema = z.object({

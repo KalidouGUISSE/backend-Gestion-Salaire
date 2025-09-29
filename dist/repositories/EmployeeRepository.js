@@ -15,6 +15,9 @@ export class EmployeeRepository extends CRUDRepesitorie {
         if (filters.position) {
             where.position = { contains: filters.position, mode: 'insensitive' };
         }
+        if (filters.fullName) {
+            where.fullName = { contains: filters.fullName, mode: 'insensitive' };
+        }
         return this.findAll(query, { where, orderBy: { createdAt: 'desc' } });
     }
     async findActiveByCompany(companyId) {

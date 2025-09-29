@@ -17,7 +17,7 @@ export const CreateUserSchema = z.object({
         .max(100, "Le mot de passe est trop long"),
 
     role: z
-        .enum(["ADMIN", "USER", "MANAGER"])
+        .enum(["ADMIN", "USER", "MANAGER", "SUPER_ADMIN"])
         .default("ADMIN"), // tu peux adapter selon ton projet
 
 

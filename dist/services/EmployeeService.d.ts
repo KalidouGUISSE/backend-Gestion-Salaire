@@ -7,6 +7,7 @@ export declare class EmployeeService {
         isActive?: boolean | undefined;
         contractType?: string | undefined;
         position?: string | undefined;
+        fullName?: string | undefined;
     }, query: PaginationQuery): Promise<PaginationResult<Employee>>;
     findEmployeeById(id: number): Promise<Employee | null>;
     createEmployee(data: Omit<Employee, "id">): Promise<Employee>;

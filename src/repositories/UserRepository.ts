@@ -8,9 +8,9 @@ export class UserRepository extends CRUDRepesitorie<User> {
     constructor(){
         super(prisma,prisma.user)
     }
-    async create(data: Omit<User, "id">): Promise<User> {
-        return prisma.user.create({ data });
-    }
+    // async create(data: Omit<User, "id">): Promise<User> {
+    //     return prisma.user.create({ data });
+    // }
 
     // async update(id: number, data: Partial<Omit<User, "id">>): Promise<User> {
     //     return prisma.user.update({ where: { id }, data });

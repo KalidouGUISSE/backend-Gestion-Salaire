@@ -7,6 +7,7 @@ export declare class EmployeeRepository extends CRUDRepesitorie<Employee> {
         isActive?: boolean | undefined;
         contractType?: string | undefined;
         position?: string | undefined;
+        fullName?: string | undefined;
     }, query: PaginationQuery): Promise<PaginationResult<Employee>>;
     findActiveByCompany(companyId: number): Promise<Employee[]>;
 }

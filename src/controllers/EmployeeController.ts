@@ -23,6 +23,7 @@ export class EmployeeController {
             }
 
             const filters = EmployeeFilterSchema.parse(req.query);
+            
             const employees = await service.getEmployees(companyId, filters, { page: filters.page, limit: filters.limit });
             res.json(formatSuccess(employees));
         } catch (error: any) {

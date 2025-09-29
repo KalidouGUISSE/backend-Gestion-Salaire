@@ -14,6 +14,7 @@ export class EmployeeRepository extends CRUDRepesitorie<Employee> {
             isActive?: boolean | undefined;
             contractType?: string | undefined;
             position?: string | undefined;
+            fullName?: string | undefined;
         },
         query: PaginationQuery
     ): Promise<PaginationResult<Employee>> {
@@ -27,6 +28,9 @@ export class EmployeeRepository extends CRUDRepesitorie<Employee> {
         }
         if (filters.position) {
             where.position = { contains: filters.position, mode: 'insensitive' };
+        }
+        if (filters.fullName) {
+            where.fullName = { contains: filters.fullName, mode: 'insensitive' };
         }
 
         return this.findAll(query, { where, orderBy: { createdAt: 'desc' } });

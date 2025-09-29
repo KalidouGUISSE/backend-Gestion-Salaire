@@ -6,6 +6,7 @@ import swaggerSpecs from "./swagger.js";
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import EmployeeRoute from "./routes/EmployeeRoute.js";
+import CompanyRoute from "./routes/CompanyRoute.js";
 import PayRunRoute from "./routes/PayRunRoute.js";
 import PayslipRoute from "./routes/PayslipRoute.js";
 import PaymentRoute from "./routes/PaymentRoute.js";
@@ -24,6 +25,7 @@ app.use(express.json()); // JSON parser
 app.use('/auth', AuthRoute);
 app.use('/users', UserRoute);
 app.use('/employees', EmployeeRoute);
+app.use('/companies', CompanyRoute);
 app.use('/payruns', PayRunRoute);
 app.use('/payslips', PayslipRoute);
 app.use('/payments', PaymentRoute);

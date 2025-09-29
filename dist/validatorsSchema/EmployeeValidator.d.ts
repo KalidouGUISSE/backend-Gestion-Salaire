@@ -41,15 +41,16 @@ export declare const UpdateEmployeeSchema: z.ZodObject<{
     isActive: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
 }, z.core.$strip>;
 export declare const EmployeeFilterSchema: z.ZodObject<{
-    isActive: z.ZodOptional<z.ZodBoolean>;
+    isActive: z.ZodPipe<z.ZodTransform<unknown, unknown>, z.ZodOptional<z.ZodBoolean>>;
     contractType: z.ZodOptional<z.ZodEnum<{
         JOURNALIER: "JOURNALIER";
         FIXE: "FIXE";
         HONORAIRE: "HONORAIRE";
     }>>;
     position: z.ZodOptional<z.ZodString>;
-    page: z.ZodDefault<z.ZodNumber>;
-    limit: z.ZodDefault<z.ZodNumber>;
+    fullName: z.ZodOptional<z.ZodString>;
+    page: z.ZodPipe<z.ZodTransform<number, unknown>, z.ZodDefault<z.ZodNumber>>;
+    limit: z.ZodPipe<z.ZodTransform<number, unknown>, z.ZodDefault<z.ZodNumber>>;
 }, z.core.$strip>;
 export declare const ActivateEmployeeSchema: z.ZodObject<{
     isActive: z.ZodBoolean;

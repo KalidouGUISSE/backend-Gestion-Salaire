@@ -19,8 +19,8 @@ export declare const ApprovePayRunSchema: z.ZodObject<{
 }, z.core.$strip>;
 export declare const PayRunFilterSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<{
-        APPROVED: "APPROVED";
         DRAFT: "DRAFT";
+        APPROVED: "APPROVED";
         CLOSED: "CLOSED";
     }>>;
     type: z.ZodOptional<z.ZodEnum<{
