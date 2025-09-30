@@ -2,6 +2,7 @@ import { Router } from "express";
 import { EmployeeController } from "../controllers/EmployeeController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = Router();
+router.get("/company/:companyId", EmployeeController.getByCompany);
 // Appliquer authMiddleware à toutes les routes
 router.use(authMiddleware);
 router.get("/", EmployeeController.getAll);

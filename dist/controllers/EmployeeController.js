@@ -11,11 +11,46 @@ export class EmployeeController {
             if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
                 return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
             }
-            const companyId = user.role === 'ADMIN' ? user.companyId : parseInt(req.query.companyId) || user.companyId;
+            const cid = req.query.companyId;
+            const companyId = user.role === 'ADMIN' ? user.companyId : (cid ? Number(cid) : user.companyId);
             if (!companyId) {
                 return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "Entreprise requise"));
             }
-            const filters = EmployeeFilterSchema.parse(req.query);
+            // Parse filters with default page and limit values to avoid NaN errors
+            const rawFilters = req.query;
+            const filters = EmployeeFilterSchema.parse({
+                ...rawFilters,
+                page: rawFilters.page ? Number(rawFilters.page) : 1,
+                limit: rawFilters.limit ? Number(rawFilters.limit) : 10,
+            });
+            const employees = await service.getEmployees(companyId, filters, { page: filters.page, limit: filters.limit });
+            res.json(formatSuccess(employees));
+        }
+        catch (error) {
+            const errors = error.errors ?? [{ message: error.message }];
+            res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, errors[0].message));
+        }
+    }
+    static async getByCompany(req, res) {
+        try {
+            const user = req.user;
+            if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+                return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
+            }
+            const companyId = parseInt(req.params.companyId);
+            if (!companyId) {
+                return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "ID d'entreprise requis"));
+            }
+            if (user.role === 'ADMIN' && user.companyId !== companyId) {
+                return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
+            }
+            // Parse filters with default page and limit values to avoid NaN errors
+            const rawFilters = req.query;
+            const filters = EmployeeFilterSchema.parse({
+                ...rawFilters,
+                page: rawFilters.page ? Number(rawFilters.page) : 1,
+                limit: rawFilters.limit ? Number(rawFilters.limit) : 10,
+            });
             const employees = await service.getEmployees(companyId, filters, { page: filters.page, limit: filters.limit });
             res.json(formatSuccess(employees));
         }

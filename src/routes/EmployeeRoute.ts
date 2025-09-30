@@ -4,6 +4,7 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
+router.get("/company/:companyId", EmployeeController.getByCompany);
 // Appliquer authMiddleware à toutes les routes
 router.use(authMiddleware);
 

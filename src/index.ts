@@ -31,7 +31,7 @@ app.use(express.json()); // JSON parser
 app.use('/auth', AuthRoute);
 app.use('/users', UserRoute);
 app.use('/employees', EmployeeRoute);
-app.use('/companies', CompanyRoute);
+app.use('/company', CompanyRoute);
 app.use('/payruns', PayRunRoute);
 app.use('/payslips', PayslipRoute);
 app.use('/payments', PaymentRoute);
