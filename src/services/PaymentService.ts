@@ -24,6 +24,9 @@ export class PaymentService {
         },
         user: User
     ): Promise<Payment> {
+
+        console.log('{}{}{}{}{}{}{]{}');
+        
         return await prisma.$transaction(async (tx) => {
             // Create payment
             const payment = await tx.payment.create({
@@ -76,7 +79,7 @@ export class PaymentService {
             }
 
             // Generate PDF receipt and create Document record
-            const filePath = await this.generateSingleReceipt(payment.id);
+            const filePath = await this.generateSingleReceipt(payment);
             const fileName = path.basename(filePath);
 
             await tx.document.create({
@@ -194,27 +197,15 @@ export class PaymentService {
     //         stream.on('error', reject);
     //     });
     // }
-    async generateSingleReceipt(paymentId: number): Promise<string> {
-        const payment = await prisma.payment.findUnique({
-            where: { id: paymentId },
-            include: {
-                payslip: {
-                    include: {
-                        employee: true,
-                        payRun: {
-                            include: {
-                                company: true,
-                            }
-                        }
-                    }
-                },
-                paidBy: true,
-            }
-        });
-
-        if (!payment) {
-            throw new Error("Paiement non trouvé");
-        }
+    async generateSingleReceipt(payment: Payment & {
+        payslip: {
+            employee: any;
+            payRun: {
+                company: any;
+            };
+        } | null;
+        paidBy: any | null;
+    }): Promise<string> {
 
         const company = payment.payslip!.payRun!.company!;
         if (!company) {
@@ -223,7 +214,7 @@ export class PaymentService {
 
         // Create PDF
         const doc = new PDFDocument();
-        const fileName = `receipt_${paymentId}_${Date.now()}.pdf`;
+        const fileName = `receipt_${payment.id}_${Date.now()}.pdf`;
         const filePath = path.join(process.cwd(), "uploads", "receipts", fileName);
 
         // Ensure directory exists

@@ -3,6 +3,16 @@ import bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 async function main() {
     console.log("🌱 Début du seed...");
+    // Nettoyer la base de données
+    console.log("🧹 Nettoyage de la base de données...");
+    await prisma.payment.deleteMany();
+    await prisma.payslip.deleteMany();
+    await prisma.attendance.deleteMany();
+    await prisma.payRun.deleteMany();
+    await prisma.employee.deleteMany();
+    await prisma.document.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.company.deleteMany();
     const hashedPassword = await bcrypt.hash("password123", 10);
     // --------------------------
     // Entreprises
@@ -28,7 +38,7 @@ async function main() {
     // --------------------------
     // Utilisateurs
     // --------------------------
-    const users = await prisma.user.createMany({
+    await prisma.user.createMany({
         data: [
             { fullName: "Super Admin", email: "superadmin@demo.com", password: hashedPassword, role: "SUPER_ADMIN", isActive: true },
             { fullName: "Admin 1", email: "admin1@demo.com", password: hashedPassword, role: "ADMIN", isActive: true, companyId: company1.id },

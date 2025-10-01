@@ -19,7 +19,15 @@ export declare class PaymentService {
         method?: string;
     }, query: PaginationQuery): Promise<PaginationResult<Payment>>;
     getPaymentsByEmployeeId(employeeId: number, companyId: number): Promise<Payment[]>;
-    generateSingleReceipt(paymentId: number): Promise<string>;
+    generateSingleReceipt(payment: Payment & {
+        payslip: {
+            employee: any;
+            payRun: {
+                company: any;
+            };
+        } | null;
+        paidBy: any | null;
+    }): Promise<string>;
     generateReceipt(paymentIds: number[], companyId: number): Promise<string>;
     exportPayRunReceipts(payRunId: number, companyId: number): Promise<string>;
 }
