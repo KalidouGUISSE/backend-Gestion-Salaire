@@ -42,6 +42,10 @@ export class PayslipService {
         return payRun;
     }
 
+    async getPayslipsByEmployeeId(employeeId: number): Promise<Payslip[]> {
+        return this.repo.findByEmployeeId(employeeId);
+    }
+
     async generatePDF(payslipId: number): Promise<string> {
         const payslip = await this.repo.findById(payslipId, { include: { employee: true, payRun: true } }) as any;
         if (!payslip) {

@@ -151,4 +151,25 @@ export class PaymentController {
             res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
         }
     }
+
+    static async getByEmployeeId(req: Request, res: Response) {
+        try {
+            const user = req.user as User;
+            if (!user || !['ADMIN', 'CASHIER', 'SUPER_ADMIN'].includes(user.role)) {
+                return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
+            }
+
+            const employeeId = Number(req.params.employeeId);
+            const companyId = user.role === 'ADMIN' ? user.companyId! : parseInt(req.query.companyId as string) || user.companyId!;
+
+            if (!companyId) {
+                return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "Entreprise requise"));
+            }
+
+            const payments = await service.getPaymentsByEmployeeId(employeeId, companyId);
+            res.json(formatSuccess(payments));
+        } catch (error: any) {
+            res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
+        }
+    }
 }

@@ -73,4 +73,25 @@ export class PaymentRepository extends CRUDRepesitorie<Payment> {
         });
         return Number(result._sum.amount) || 0;
     }
+
+    async findByEmployeeId(employeeId: number, companyId: number): Promise<Payment[]> {
+        return prisma.payment.findMany({
+            where: {
+                payslip: {
+                    employeeId
+                },
+                companyId
+            },
+            include: {
+                payslip: {
+                    include: {
+                        employee: true,
+                        payRun: true
+                    }
+                },
+                paidBy: true
+            },
+            orderBy: { paidAt: 'desc' }
+        });
+    }
 }

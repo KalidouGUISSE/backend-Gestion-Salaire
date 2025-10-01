@@ -12,5 +12,6 @@ export declare class PaymentRepository extends CRUDRepesitorie<Payment> {
     }, query: PaginationQuery): Promise<PaginationResult<Payment>>;
     findByPayslipId(payslipId: number): Promise<Payment[]>;
     getTotalPaidForPayslip(payslipId: number): Promise<number>;
+    findByEmployeeId(employeeId: number, companyId: number): Promise<Payment[]>;
 }
 //# sourceMappingURL=PaymentRepository.d.ts.map

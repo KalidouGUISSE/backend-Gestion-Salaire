@@ -79,6 +79,9 @@ export class PaymentService {
     getPayments(companyId, filters, query) {
         return this.repo.findByCompanyAndFilters(companyId, filters, query);
     }
+    async getPaymentsByEmployeeId(employeeId, companyId) {
+        return this.repo.findByEmployeeId(employeeId, companyId);
+    }
     // async generateReceipt(paymentIds: number[], companyId: number): Promise<string> {
     //     // Get payments with details
     //     const payments = await prisma.payment.findMany({

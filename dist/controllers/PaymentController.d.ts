@@ -5,5 +5,6 @@ export declare class PaymentController {
     static getForPayRun(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static generateReceipt(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static exportPayRunReceipts(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
+    static getByEmployeeId(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
 }
 //# sourceMappingURL=PaymentController.d.ts.map

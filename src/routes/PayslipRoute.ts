@@ -16,4 +16,7 @@ router.put("/:id", PayslipController.update);
 router.delete("/:id", PayslipController.delete);
 router.get("/:id/export-pdf", PayslipController.generatePDF);
 
+// Payslips by employee
+router.get("/employee/:employeeId", PayslipController.getByEmployeeId);
+
 export default router;

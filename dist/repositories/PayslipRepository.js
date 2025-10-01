@@ -42,5 +42,12 @@ export class PayslipRepository extends CRUDRepesitorie {
             }
         };
     }
+    async findByEmployeeId(employeeId) {
+        return prisma.payslip.findMany({
+            where: { employeeId },
+            include: { employee: true, payRun: true, payments: true },
+            orderBy: { createdAt: 'desc' }
+        });
+    }
 }
 //# sourceMappingURL=PayslipRepository.js.map

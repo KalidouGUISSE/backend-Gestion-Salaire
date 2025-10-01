@@ -18,6 +18,7 @@ export declare class PaymentService {
         endDate?: Date;
         method?: string;
     }, query: PaginationQuery): Promise<PaginationResult<Payment>>;
+    getPaymentsByEmployeeId(employeeId: number, companyId: number): Promise<Payment[]>;
     generateSingleReceipt(paymentId: number): Promise<string>;
     generateReceipt(paymentIds: number[], companyId: number): Promise<string>;
     exportPayRunReceipts(payRunId: number, companyId: number): Promise<string>;

@@ -6,5 +6,6 @@ export declare class PayslipController {
     static delete(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static findById(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static generatePDF(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
+    static getByEmployeeId(req: Request, res: Response): Promise<void>;
 }
 //# sourceMappingURL=PayslipController.d.ts.map

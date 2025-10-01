@@ -145,4 +145,26 @@ export class PayslipController {
             res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
         }
     }
+
+    static async getByEmployeeId(req: Request, res: Response) {
+        try {
+            const user = req.user as any;
+            const employeeId = Number(req.params.employeeId);
+
+            const payslips = await service.getPayslipsByEmployeeId(employeeId);
+
+            // Filter by company if user is ADMIN
+            if (user.role === 'ADMIN') {
+                const filteredPayslips = payslips.filter(async (payslip) => {
+                    const payRun = await service.getPayRunStatus(payslip.payRunId);
+                    return payRun.companyId === user.companyId;
+                });
+                res.json(formatSuccess(filteredPayslips));
+            } else {
+                res.json(formatSuccess(payslips));
+            }
+        } catch (error: any) {
+            res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
+        }
+    }
 }

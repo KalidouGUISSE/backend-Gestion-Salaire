@@ -15,6 +15,7 @@ export declare class PayslipService {
         status: string;
         companyId: number;
     }>;
+    getPayslipsByEmployeeId(employeeId: number): Promise<Payslip[]>;
     generatePDF(payslipId: number): Promise<string>;
 }
 //# sourceMappingURL=PayslipService.d.ts.map

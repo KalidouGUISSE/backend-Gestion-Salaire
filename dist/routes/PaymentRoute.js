@@ -98,5 +98,7 @@ router.post("/generate-receipt", PaymentController.generateReceipt);
  *         description: PDF généré
  */
 router.get("/export-payrun/:payRunId", PaymentController.exportPayRunReceipts);
+// Payments by employee
+router.get("/employee/:employeeId", PaymentController.getByEmployeeId);
 export default router;
 //# sourceMappingURL=PaymentRoute.js.map
