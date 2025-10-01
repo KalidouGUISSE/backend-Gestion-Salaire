@@ -13,5 +13,7 @@ router.delete("/:id", PayslipController.delete);
 router.get("/:id/export-pdf", PayslipController.generatePDF);
 // Payslips by employee
 router.get("/employee/:employeeId", PayslipController.getByEmployeeId);
+// All payslips (for payment selection)
+router.get("/", PayslipController.getAllPayslips);
 export default router;
 //# sourceMappingURL=PayslipRoute.js.map

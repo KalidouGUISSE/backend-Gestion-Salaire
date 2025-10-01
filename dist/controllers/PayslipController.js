@@ -149,5 +149,20 @@ export class PayslipController {
             res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
         }
     }
+    static async getAllPayslips(req, res) {
+        try {
+            const user = req.user;
+            const query = {
+                page: Number(req.query.page) || 1,
+                limit: Number(req.query.limit) || 100, // Higher limit for payment selection
+            };
+            const payslips = await service.getAllPayslipsForPayment(query, user?.role === 'ADMIN' ? user?.companyId : user?.companyId);
+            res.json(formatSuccess(payslips));
+        }
+        catch (error) {
+            console.error('Error in getAllPayslips:', error);
+            res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
+        }
+    }
 }
 //# sourceMappingURL=PayslipController.js.map

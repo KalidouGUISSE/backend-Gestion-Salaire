@@ -16,6 +16,7 @@ export declare class PayslipService {
         companyId: number;
     }>;
     getPayslipsByEmployeeId(employeeId: number): Promise<Payslip[]>;
+    getAllPayslipsForPayment(query: PaginationQuery, companyId?: number): Promise<PaginationResult<Payslip>>;
     generatePDF(payslipId: number): Promise<string>;
 }
 //# sourceMappingURL=PayslipService.d.ts.map

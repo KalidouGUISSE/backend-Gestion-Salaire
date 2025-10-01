@@ -49,5 +49,50 @@ export class PayslipRepository extends CRUDRepesitorie {
             orderBy: { createdAt: 'desc' }
         });
     }
+    async findAllForPayment(query, companyId) {
+        const { page = 1, limit = 100 } = query;
+        const skip = (page - 1) * limit;
+        // Get payslips that are not fully paid (have outstanding balance)
+        const where = {
+            OR: [
+                { status: 'PENDING' },
+                { status: 'PARTIAL' }
+            ]
+        };
+        // Filter by company if companyId is provided
+        if (companyId) {
+            where.payRun = {
+                companyId: companyId
+            };
+        }
+        const [data, total] = await Promise.all([
+            prisma.payslip.findMany({
+                where,
+                include: {
+                    employee: true,
+                    payRun: {
+                        include: {
+                            company: true
+                        }
+                    },
+                    payments: true
+                },
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' }
+            }),
+            prisma.payslip.count({ where })
+        ]);
+        return {
+            data,
+            meta: {
+                total,
+                page,
+                lastPage: Math.ceil(total / limit),
+                hasNextPage: page * limit < total,
+                hasPrevPage: page > 1,
+            }
+        };
+    }
 }
 //# sourceMappingURL=PayslipRepository.js.map

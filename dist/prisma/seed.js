@@ -108,6 +108,20 @@ async function main() {
             },
         });
     }
+    // Create some additional payslips that are not fully paid for testing
+    const testEmployee = createdEmployees.find(e => e.companyId === company1.id);
+    if (testEmployee) {
+        await prisma.payslip.create({
+            data: {
+                payRunId: payRun1.id,
+                employeeId: testEmployee.id,
+                gross: 200000,
+                deductions: 20000,
+                netPayable: 180000,
+                status: "PENDING", // This one won't be paid
+            },
+        });
+    }
     // --------------------------
     // Paiements
     // --------------------------
