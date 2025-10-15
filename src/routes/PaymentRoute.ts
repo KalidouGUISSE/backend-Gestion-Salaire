@@ -108,4 +108,27 @@ router.get("/export-payrun/:payRunId", PaymentController.exportPayRunReceipts);
 // Payments by employee
 router.get("/employee/:employeeId", PaymentController.getByEmployeeId);
 
+/**
+ * @swagger
+ * /payments/validate-qr:
+ *   post:
+ *     summary: Valider un paiement via QR code
+ *     tags: [Payments]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               paymentId:
+ *                 type: integer
+ *               qrToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Paiement validé
+ */
+router.post("/validate-qr", PaymentController.validateQR);
+
 export default router;

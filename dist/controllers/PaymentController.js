@@ -151,14 +151,34 @@ export class PaymentController {
                 return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
             }
             const employeeId = Number(req.params.employeeId);
-            const companyId = user.role === 'ADMIN' ? user.companyId : parseInt(req.query.companyId) || user.companyId;
-            if (!companyId) {
-                return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "Entreprise requise"));
+            let companyId;
+            if (user.role === 'ADMIN' || user.role === 'CASHIER') {
+                companyId = user.companyId;
+            }
+            else if (user.role === 'SUPER_ADMIN') {
+                companyId = parseInt(req.query.companyId) || 1; // Default to company 1 for SUPER_ADMIN
+            }
+            else {
+                companyId = 1; // Default for other roles
             }
             const payments = await service.getPaymentsByEmployeeId(employeeId, companyId);
             res.json(formatSuccess(payments));
         }
         catch (error) {
+            res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
+        }
+    }
+    static async validateQR(req, res) {
+        try {
+            const { paymentId, qrToken } = req.body;
+            if (!paymentId || !qrToken) {
+                return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "paymentId et qrToken requis"));
+            }
+            const payment = await service.validateQR(Number(paymentId), qrToken);
+            res.json(formatSuccess(payment, HttpStatus.OK, "Paiement validé par QR avec succès"));
+        }
+        catch (error) {
+            console.error('Error in PaymentController.validateQR:', error);
             res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
         }
     }

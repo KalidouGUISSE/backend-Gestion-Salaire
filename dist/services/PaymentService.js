@@ -276,6 +276,53 @@ export class PaymentService {
             stream.on("error", reject);
         });
     }
+    async validateQR(paymentId, qrToken) {
+        return await prisma.$transaction(async (tx) => {
+            // Find the payment
+            const payment = await tx.payment.findUnique({
+                where: { id: paymentId },
+                include: {
+                    payslip: {
+                        include: {
+                            employee: {
+                                include: {
+                                    profile: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            if (!payment) {
+                throw new Error("Paiement non trouvé");
+            }
+            if (!payment.payslip) {
+                throw new Error("Ce paiement n'est pas lié à un bulletin");
+            }
+            const employee = payment.payslip.employee;
+            if (!employee || !employee.profile) {
+                throw new Error("Profil employé non trouvé");
+            }
+            if (employee.profile.qrToken !== qrToken) {
+                throw new Error("Jeton QR invalide pour cet employé");
+            }
+            // Update payment as QR validated
+            const updatedPayment = await tx.payment.update({
+                where: { id: paymentId },
+                data: { qrValidated: true },
+                include: {
+                    payslip: {
+                        include: {
+                            employee: true
+                        }
+                    }
+                }
+            });
+            // Log the validation (you can extend this with a proper logging system)
+            console.log(`Paiement ${paymentId} validé par QR pour employé ${employee.fullName}`);
+            return updatedPayment;
+        });
+    }
     async exportPayRunReceipts(payRunId, companyId) {
         // Get all payments for the payrun
         const payments = await prisma.payment.findMany({

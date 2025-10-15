@@ -4,10 +4,10 @@ export declare const CreateUserSchema: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
     role: z.ZodDefault<z.ZodEnum<{
-        ADMIN: "ADMIN";
-        USER: "USER";
-        CASHIER: "CASHIER";
         SUPER_ADMIN: "SUPER_ADMIN";
+        ADMIN: "ADMIN";
+        CASHIER: "CASHIER";
+        EMPLOYEE: "EMPLOYEE";
     }>>;
     companyId: z.ZodOptional<z.ZodNullable<z.ZodNumber>>;
     isActive: z.ZodDefault<z.ZodBoolean>;

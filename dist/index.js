@@ -11,6 +11,7 @@ import PayRunRoute from "./routes/PayRunRoute.js";
 import PayslipRoute from "./routes/PayslipRoute.js";
 import PaymentRoute from "./routes/PaymentRoute.js";
 import DashboardRoute from "./routes/DashboardRoute.js";
+import { AttendanceRoute } from "./routes/AttendanceRoute.js";
 dotenv.config();
 const app = express();
 // Autoriser ton frontend
@@ -22,6 +23,8 @@ app.use(cors({
 }));
 // Middlewares
 app.use(express.json()); // JSON parser
+// Serve static files
+app.use('/uploads', express.static('uploads'));
 // Routes
 app.use('/auth', AuthRoute);
 app.use('/users', UserRoute);
@@ -31,6 +34,7 @@ app.use('/payruns', PayRunRoute);
 app.use('/payslips', PayslipRoute);
 app.use('/payments', PaymentRoute);
 app.use('/dashboard', DashboardRoute);
+app.use('/attendance', AttendanceRoute);
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 // Start server

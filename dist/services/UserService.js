@@ -6,7 +6,7 @@ export class UserService {
         this.repo = new UserRepository();
     }
     getAllUsers(page, limit) {
-        return this.repo.findAll({ page: page, limit: limit });
+        return this.repo.findAll({ page: page, limit: limit }, { include: { company: true } });
     }
     findUserById(id) {
         return this.repo.findById(id);

@@ -29,6 +29,7 @@ export declare class PaymentService {
         paidBy: any | null;
     }): Promise<string>;
     generateReceipt(paymentIds: number[], companyId: number): Promise<string>;
+    validateQR(paymentId: number, qrToken: string): Promise<Payment>;
     exportPayRunReceipts(payRunId: number, companyId: number): Promise<string>;
 }
 //# sourceMappingURL=PaymentService.d.ts.map

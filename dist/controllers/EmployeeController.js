@@ -5,6 +5,7 @@ import { HttpStatus } from "../enums/httpStatus.js";
 const service = new EmployeeService();
 export class EmployeeController {
     static async getAll(req, res) {
+        console.log('22222222222');
         try {
             const user = req.user;
             console.log(user);
@@ -159,6 +160,33 @@ export class EmployeeController {
         catch (error) {
             const errors = error.errors ?? [{ message: error.message }];
             res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, errors[0].message));
+        }
+    }
+    static async uploadPhotos(req, res) {
+        try {
+            const user = req.user;
+            if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+                return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
+            }
+            const id = Number(req.params.id);
+            if (!req.file) {
+                return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, "Image requise"));
+            }
+            const existing = await service.findEmployeeById(id);
+            if (!existing) {
+                return res.status(HttpStatus.NOT_FOUND).json(formatError(HttpStatus.NOT_FOUND, "Employé non trouvé"));
+            }
+            if (user.role === 'ADMIN' && existing.companyId !== user.companyId) {
+                return res.status(HttpStatus.FORBIDDEN).json(formatError(HttpStatus.FORBIDDEN, "Accès refusé"));
+            }
+            // Save path relative to server root to be accessible via /uploads
+            const relativePath = req.file.path.replace(/\\/g, '/').replace(/^\/+/, '');
+            const updated = await service.updateEmployee(id, { photos: relativePath });
+            const result = await service.findEmployeeById(updated.id);
+            return res.json(formatSuccess(result, HttpStatus.OK, "Photo de profil mise à jour"));
+        }
+        catch (error) {
+            return res.status(HttpStatus.BAD_REQUEST).json(formatError(HttpStatus.BAD_REQUEST, error.message));
         }
     }
 }

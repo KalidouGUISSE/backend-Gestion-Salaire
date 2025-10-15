@@ -69,21 +69,13 @@ export class PayRunService {
         for (const employee of employees) {
             let gross: number;
             if (employee.contractType === 'JOURNALIER') {
-                // Count days worked from attendances in the period
-                const daysWorked = await prisma.attendance.count({
-                    where: {
-                        employeeId: employee.id,
-                        companyId: payRun.companyId,
-                        date: {
-                            gte: payRun.periodStart,
-                            lte: payRun.periodEnd,
-                        },
-                        present: true,
-                    },
-                });
-                gross = employee.salary.toNumber() * daysWorked;
+                // Daily * 30 days
+                gross = employee.salary.toNumber() * 30;
+            } else if (employee.contractType === 'HONORAIRE') {
+                // Hourly * 6 hours * 30 days
+                gross = employee.salary.toNumber() * 6 * 30;
             } else {
-                // For FIXE and HONORAIRE, use full salary (assuming monthly base)
+                // FIXE: monthly salary * 1
                 gross = employee.salary.toNumber();
             }
 

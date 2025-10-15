@@ -11,7 +11,7 @@ export class UserService {
     }
 
     getAllUsers(page:number, limit:number):Promise<PaginationResult<User>>{
-        return this.repo.findAll({ page: page, limit: limit });
+        return this.repo.findAll({ page: page, limit: limit }, { include: { company: true } });
     }
 
     findUserById(id: number): Promise<User | null> {

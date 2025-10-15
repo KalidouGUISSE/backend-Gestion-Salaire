@@ -49,6 +49,11 @@ enum PaymentMethod {
   OTHER
 }
 
+enum AttendanceType {
+  ENTRY
+  EXIT
+}
+
 model Company {
   id            Int        @id @default(autoincrement())
   name          String
@@ -78,7 +83,7 @@ model User {
   fullName    String?
   role        Role     @default(ADMIN)
   // si null -> super-admin (accès multi-entreprises)
-  companyId   Int?     
+  companyId   Int?
   company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -100,7 +105,7 @@ model Employee {
   firstName      String
   lastName       String
   fullName       String?
-  email          String? 
+  email          String?
   phone          String?
   position       String?
   contractType   ContractType
@@ -112,15 +117,31 @@ model Employee {
   hireDate       DateTime?
   endDate        DateTime?
   isActive       Boolean      @default(true)
+  photos         String?      // chemin vers la photo de profil
+  attendanceCount Int         @default(0) // nombre total de pointages
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
+  profile        EmployeeProfile?
   payslips       Payslip[]
   attendances    Attendance[]
 
   @@map("employees")
   @@index([companyId])
   @@index([contractType])
+}
+
+model EmployeeProfile {
+  id          Int      @id @default(autoincrement())
+  employeeId  Int      @unique
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  qrToken     String   @db.Text
+  qrCodePath  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("employee_profiles")
+  @@index([employeeId])
 }
 
 model PayRun {
@@ -192,11 +213,12 @@ model Payment {
   method       PaymentMethod
   reference    String?      // numéro de transaction, référence OM, etc.
   receiptPath  String?      // chemin du PDF reçu
-  paidById     Int?         
+  paidById     Int?
   paidBy       User?        @relation(fields: [paidById], references: [id], onDelete: SetNull)
   paidAt       DateTime     @default(now())
   createdAt    DateTime     @default(now())
   notes        String?
+  qrValidated  Boolean      @default(false) // indique si le paiement a été validé via QR code
 
   @@map("payments")
   @@index([companyId])
@@ -206,21 +228,19 @@ model Payment {
 
 /// émargements / feuilles de présence (utile pour journaliers)
 model Attendance {
-  id          Int       @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   employeeId  Int
-  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employee    Employee       @relation(fields: [employeeId], references: [id], onDelete: Cascade)
   companyId   Int
-  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  date        DateTime
-  present     Boolean   @default(true)
-  hoursWorked Decimal   @db.Decimal(6,2) @default(0) // optionnel
-  note        String?
-  createdAt   DateTime  @default(now())
+  company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  timestamp   DateTime       @default(now()) // timestamp of the scan
+  type        AttendanceType @default(ENTRY) // entry or exit
+  deviceId    String?        // scanner identifier
+  createdAt   DateTime       @default(now())
 
   @@map("attendances")
-  @@index([employeeId, date])
-  @@index([companyId, date])
-  @@unique([employeeId, date]) // une seule entrée par jour par employé
+  @@index([employeeId, timestamp])
+  @@index([companyId, timestamp])
 }
 
 model Document {

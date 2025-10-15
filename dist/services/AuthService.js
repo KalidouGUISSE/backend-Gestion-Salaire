@@ -7,11 +7,14 @@ export class AuthService {
     }
     async login(email, password) {
         const user = await this.repo.findUserByLogin(email);
+        console.log('user', user);
         if (!user)
             throw new Error("Utilisateur introuvable");
         const valid = await this.repo.verifyPassword(password, user.password);
+        console.log('=ppppppppp=');
         if (!valid)
             throw new Error("Mot de passe incorrect");
+        console.log('=============');
         const accessToken = jwt.sign({
             id: user.id,
             login: user.email,

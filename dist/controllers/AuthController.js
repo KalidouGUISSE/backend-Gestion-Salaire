@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"; // <-- Import manquant
 const authService = new AuthService(new AuthRepository());
 export class AuthController {
     static async login(req, res) {
+        console.log('oooooooooo');
         try {
             const { email, password } = LoginSchema.parse(req.body);
             const { accessToken, refreshToken, user } = await authService.login(email, password);
@@ -28,7 +29,7 @@ export class AuthController {
             if (!token)
                 throw new Error("Pas de refresh token");
             const payload = await authService.verifyRefreshToken(token);
-            const accessToken = jwt.sign({ id: payload.id }, process.env.JWT_ACCESS_SECRET, { expiresIn: "15m" });
+            const accessToken = jwt.sign({ id: payload.id }, process.env.ACCESS_SECRET, { expiresIn: "15m" });
             return res.json({ accessToken });
         }
         catch (error) {

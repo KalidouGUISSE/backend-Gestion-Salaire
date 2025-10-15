@@ -7,5 +7,6 @@ export declare class EmployeeController {
     static update(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static delete(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     static activate(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
+    static uploadPhotos(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 }
 //# sourceMappingURL=EmployeeController.d.ts.map

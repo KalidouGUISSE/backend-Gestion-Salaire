@@ -13,7 +13,7 @@ export const CreateUserSchema = z.object({
         .min(6, "Le mot de passe doit contenir au moins 6 caractères")
         .max(100, "Le mot de passe est trop long"),
     role: z
-        .enum(["ADMIN", "USER", "CASHIER", "SUPER_ADMIN"])
+        .enum(["SUPER_ADMIN", "ADMIN", "CASHIER", "EMPLOYEE"])
         .default("ADMIN"), // tu peux adapter selon ton projet
     companyId: z.number().nullable().optional(),
     isActive: z.boolean().default(true),
