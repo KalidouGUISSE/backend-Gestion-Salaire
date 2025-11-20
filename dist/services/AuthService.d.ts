@@ -7,9 +7,9 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
         user: {
-            id: number;
             email: string;
             password: string;
+            id: number;
             fullName: string | null;
             role: import("@prisma/client").$Enums.Role;
             companyId: number | null;
