@@ -20,7 +20,7 @@ const options = {
                 description: "Serveur de développement",
             },
             {
-                url: "https://your-app.onrender.com",
+                url: "https://backend-gestion-salaire.onrender.com",
                 description: "Serveur de production Render",
             },
         ],
