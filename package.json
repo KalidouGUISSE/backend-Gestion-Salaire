@@ -14,6 +14,7 @@
     "migrate:deploy": "npx prisma migrate deploy",
     "db:seed": "npx prisma db seed",
     "db:reset": "npx prisma migrate reset --force",
+    "deploy": "./deploy.sh",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "swagger:validate": "node validate-swagger.js"
