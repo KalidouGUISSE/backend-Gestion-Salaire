@@ -16,7 +16,7 @@ const router = Router();
  *           schema:
  *             $ref: '#/components/schemas/LoginRequest'
  *           example:
- *             email: "admin@company.com"
+ *             email: "admin1@techsolutions.sn"
  *             password: "password123"
  *     responses:
  *       200:
