@@ -16,12 +16,12 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:3000",
-                description: "Serveur de développement",
-            },
-            {
                 url: "https://backend-gestion-salaire.onrender.com",
                 description: "Serveur de production Render",
+            },
+            {
+                url: "http://localhost:3000",
+                description: "Serveur de développement",
             },
         ],
         components: {
