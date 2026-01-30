@@ -1,275 +1,518 @@
-# 🚀 Backend - Système de Gestion des Salaires
+# 🚀 Backend - Gestion de Salaire
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![Express](https://img.shields.io/badge/Express-5.0+-black.svg)](https://expressjs.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.0+-purple.svg)](https://www.prisma.io/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0+-orange.svg)](https://www.mysql.com/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![License](https://img.shields.io/badge/License-ISC-yellow.svg)](./LICENSE)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)](https://www.postgresql.org/)
+[![Render](https://img.shields.io/badge/Render-Deployed-success.svg)](https://render.com/)
 
-## 📋 Description
+**GitHub Repository**: [https://github.com/KalidouGUISSE/backend-Gestion-Salaire](https://github.com/KalidouGUISSE/backend-Gestion-Salaire)  
+**Swagger Documentation**: [https://backend-gestion-salaire.onrender.com/api-docs](https://backend-gestion-salaire.onrender.com/api-docs)
 
-Une API backend robuste et évolutive pour la gestion des salaires multi-entreprises, développée avec les technologies modernes. Ce système permet de gérer efficacement les employés, les cycles de paie, les bulletins de salaire et les paiements avec une architecture sécurisée et performante.
+---
 
-## ✨ Fonctionnalités
+## 🎯 Objectif du Projet
 
-- 🔐 **Support multi-entreprises** avec contrôle d'accès basé sur les rôles
-- 👥 **Gestion des employés** complète (CRUD, contrats, photos)
-- 💰 **Génération de cycles de paie** et bulletins de salaire PDF
-- 💳 **Traitement des paiements** avec reçus PDF
-- 📊 **Tableau de bord** avec KPIs et analyses
-- 📱 **API RESTful** documentée avec Swagger
-- 🧪 **Tests unitaires et d'intégration** complets
-- 🐳 **Containerisation Docker** pour un déploiement facile
-- 📧 **Notifications par email** pour les bulletins de salaire
-- 📷 **Upload de photos** et génération de QR codes
+### Besoin Métier
+Ce système backend répond au besoin critique des entreprises de gérer efficacement leur processus de paie dans un environnement multi-entreprises sécurisé. Il automatise la gestion des employés, le calcul des salaires, la génération des bulletins de paie et le suivi des paiements, réduisant ainsi les erreurs manuelles et améliorant la conformité réglementaire.
 
-## 🛠️ Prérequis
+### Public Cible
+- **Entreprises multi-sites** nécessitant une gestion centralisée des ressources humaines
+- **Équipes RH** cherchant à automatiser les processus de paie mensuels
+- **Administrateurs système** responsables de la maintenance et de la sécurité des données
+- **Développeurs frontend** intégrant l'API dans des applications web/mobile
 
-Avant de commencer, assurez-vous d'avoir installé :
+### Cas d'Usage Concrets
+- **Gestion des employés** : CRUD complet avec contrats, photos et données personnelles
+- **Calcul automatique des salaires** : Support des différents types de contrats (CDI, CDD, journalier)
+- **Génération de bulletins PDF** : Documents officiels avec QR codes pour validation
+- **Suivi des paiements** : Historique complet avec reçus et méthodes de paiement multiples
+- **Tableaux de bord** : KPIs en temps réel pour la direction
 
-- **Node.js** (version 18 ou supérieure)
-- **npm** ou **yarn**
-- **MySQL** (version 8.0 ou supérieure)
-- **Docker** et **Docker Compose** (optionnel, pour le déploiement containerisé)
+---
 
-## 📦 Installation
+## 📋 Description Fonctionnelle
 
-### 1. Clonage du dépôt
+### 🔐 Gestion des Utilisateurs et Authentification
+- **Authentification JWT** avec refresh tokens pour une sécurité renforcée
+- **Système de rôles** : SUPER_ADMIN, ADMIN, CASHIER, EMPLOYEE
+- **Support multi-entreprises** : Isolation des données par entreprise
+- **Gestion des sessions** : Expiration automatique et révocation
 
-```bash
-git clone <url-du-depot>
-cd backend
+### 👥 Gestion des Employés
+- **CRUD complet** : Création, lecture, mise à jour, suppression
+- **Profils détaillés** : Informations personnelles, contrats, photos
+- **Types de contrats** : CDI, CDD, HONORAIRE, JOURNALIER
+- **Upload de photos** : Stockage sécurisé avec optimisation
+- **Génération de QR codes** : Pour validation rapide des présences
+
+### 💰 Gestion des Salaires et Paie
+- **Cycles de paie** : Mensuel, hebdomadaire, quotidien
+- **Calcul automatique** : Déductions, avantages, taxes
+- **Bulletins PDF** : Génération automatique avec mise en page professionnelle
+- **Historique complet** : Traçabilité de tous les calculs
+
+### 💳 Gestion des Paiements
+- **Méthodes multiples** : Espèces, virement, Orange Money, Wave
+- **Suivi en temps réel** : Statuts PARTIAL, PAID, LOCKED
+- **Reçus PDF** : Génération automatique avec références
+- **Validation QR** : Sécurisation des transactions
+
+### 📊 Tableaux de Bord et Analytics
+- **KPIs en temps réel** : Effectifs, masse salariale, paiements
+- **Rapports périodiques** : Analyses par entreprise et période
+- **Métriques de performance** : Taux de paiement, délais moyens
+
+### 🛡️ Sécurité et Conformité
+- **Chiffrement des données sensibles** : Mots de passe, informations bancaires
+- **Validation stricte** : Schémas Zod pour toutes les entrées
+- **Logs d'audit** : Traçabilité de toutes les actions
+- **Protection contre les attaques** : Rate limiting, CORS, helmet
+
+---
+
+## 🛠️ Stack Technique
+
+| Technologie | Version | Justification |
+|-------------|---------|---------------|
+| **Node.js** | 18+ | Runtime JavaScript performant avec support LTS long terme |
+| **TypeScript** | 5.0+ | Typage statique pour la robustesse et la maintenabilité |
+| **Express.js** | 5.0+ | Framework minimaliste et extensible pour APIs REST |
+| **Prisma** | 6.0+ | ORM moderne avec migration automatique et sécurité des types |
+| **PostgreSQL** | 15+ | Base de données relationnelle robuste et ACID compliant |
+| **Zod** | 4.1+ | Validation des schémas avec inférence de types TypeScript |
+| **JWT** | 9.0+ | Standard d'authentification stateless et sécurisé |
+| **Swagger/OpenAPI** | 6.2+ | Documentation automatique et interactive de l'API |
+| **Puppeteer** | 24+ | Génération de PDFs haute qualité pour les bulletins |
+| **QRCode** | 1.5+ | Génération de codes QR pour validation mobile |
+| **Nodemailer** | 7.0+ | Envoi d'emails transactionnels sécurisé |
+
+### Choix Architecturaux
+- **Architecture en couches** : Séparation claire des responsabilités (Routes → Controllers → Services → Repositories)
+- **Pattern Repository** : Abstraction de l'accès aux données pour la testabilité
+- **Validation centralisée** : Schémas Zod réutilisables dans toute l'application
+- **Gestion d'erreurs unifiée** : Middleware centralisé pour les réponses d'erreur
+
+---
+
+## 🏗️ Architecture Technique
+
+### Architecture Générale
+
+```mermaid
+graph TD
+    A[Client HTTP] --> B[Express Router]
+    B --> C[Middleware Auth]
+    C --> D[Validation Middleware]
+    D --> E[Controller Layer]
+    E --> F[Service Layer]
+    F --> G[Repository Layer]
+    G --> H[Prisma Client]
+    H --> I[(PostgreSQL Database)]
+
+    J[File Upload] --> K[Multer Middleware]
+    K --> L[Storage Service]
+
+    M[Email Service] --> N[Nodemailer]
+    O[PDF Service] --> P[Puppeteer]
+    Q[QR Service] --> R[QRCode Library]
 ```
 
-### 2. Installation des dépendances
-
-```bash
-npm install
-```
-
-### 3. Configuration des variables d'environnement
-
-Copiez le fichier d'exemple et configurez vos variables :
-
-```bash
-cp .env.example .env
-```
-
-Éditez le fichier `.env` avec vos valeurs :
-
-```env
-DATABASE_URL="mysql://user:password@localhost:3306/payroll_db"
-JWT_SECRET="votre-secret-jwt-super-securise"
-NODE_ENV="development"
-EMAIL_HOST="smtp.gmail.com"
-EMAIL_PORT=587
-EMAIL_USER="votre-email@gmail.com"
-EMAIL_PASS="votre-mot-de-passe-app"
-```
-
-### 4. Configuration de la base de données
-
-```bash
-# Appliquer les migrations
-npm run migrate
-
-# Alimenter la base avec des données de test
-npm run db:seed
-```
-
-## 🚀 Utilisation
-
-### Développement
-
-```bash
-npm run dev
-```
-
-L'API sera accessible sur `http://localhost:3000`
-
-### Production
-
-```bash
-npm run build
-npm start
-```
-
-### Docker
-
-```bash
-# Construction et lancement
-docker-compose up --build
-
-# En arrière-plan
-docker-compose up -d
-```
-
-## 🧪 Tests
-
-### Exécution de tous les tests
-
-```bash
-npm test
-```
-
-### Tests avec couverture
-
-```bash
-npm run test:coverage
-```
-
-### Test d'un fichier spécifique
-
-```bash
-npm test -- tests/unit/PaymentService.test.ts
-```
-
-### Test de l'API
-
-```bash
-npm run test:api
-```
-
-## 📚 Documentation API
-
-La documentation Swagger est disponible à l'adresse : `http://localhost:3000/api-docs`
-
-### Exemples d'appels API
-
-#### Création d'un employé
-
-```bash
-curl -X POST http://localhost:3000/api/employees \
-  -H "Authorization: Bearer VOTRE_TOKEN_JWT" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "firstName": "Jean",
-    "lastName": "Dupont",
-    "email": "jean.dupont@entreprise.com",
-    "contractType": "CDI",
-    "salary": 45000,
-    "companyId": 1
-  }'
-```
-
-#### Création d'un cycle de paie
-
-```bash
-curl -X POST http://localhost:3000/api/payruns \
-  -H "Authorization: Bearer VOTRE_TOKEN_JWT" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "type": "MONTHLY",
-    "periodStart": "2024-01-01T00:00:00.000Z",
-    "periodEnd": "2024-01-31T23:59:59.000Z",
-    "companyId": 1
-  }'
-```
-
-#### Génération des bulletins de salaire
-
-```bash
-curl -X POST http://localhost:3000/api/payruns/1/generate-payslips \
-  -H "Authorization: Bearer VOTRE_TOKEN_JWT"
-```
-
-#### Enregistrement d'un paiement
-
-```bash
-curl -X POST http://localhost:3000/api/payments \
-  -H "Authorization: Bearer VOTRE_TOKEN_JWT" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "payslipId": 1,
-    "amount": 4200,
-    "method": "BANK_TRANSFER",
-    "reference": "PAY-2024-001"
-  }'
-```
-
-## 🏗️ Architecture du Projet
+### Organisation du Code
 
 ```
 backend/
 ├── src/
-│   ├── controllers/          # Contrôleurs de l'API
-│   ├── services/            # Logique métier
-│   ├── repositories/        # Couche d'accès aux données
-│   ├── routes/              # Définition des routes
-│   ├── validatorsSchema/    # Validation des données (Zod)
+│   ├── controllers/          # Gestion des requêtes/réponses HTTP
+│   │   ├── AuthController.ts
+│   │   ├── EmployeeController.ts
+│   │   ├── PayRunController.ts
+│   │   └── PaymentController.ts
+│   ├── services/            # Logique métier et orchestration
+│   │   ├── AuthService.ts
+│   │   ├── EmployeeService.ts
+│   │   ├── PayRunService.ts
+│   │   └── PaymentService.ts
+│   ├── repositories/        # Accès aux données (Prisma)
+│   │   ├── AuthRepository.ts
+│   │   ├── EmployeeRepository.ts
+│   │   ├── PayRunRepository.ts
+│   │   └── PaymentRepository.ts
+│   ├── routes/              # Définition des endpoints REST
+│   │   ├── auth.ts
+│   │   ├── employees.ts
+│   │   ├── payruns.ts
+│   │   └── payments.ts
+│   ├── validatorsSchema/    # Schémas de validation Zod
+│   │   ├── AuthValidator.ts
+│   │   ├── EmployeeValidator.ts
+│   │   ├── PayRunValidator.ts
+│   │   └── PaymentValidator.ts
 │   ├── middleware/          # Middlewares Express
-│   ├── utils/               # Utilitaires (email, QR, PDF)
+│   │   ├── authMiddleware.ts
+│   │   └── errorHandler.ts
+│   ├── utils/               # Utilitaires transversaux
+│   │   ├── emailUtils.ts
+│   │   ├── pdfUtils.ts
+│   │   ├── qrUtils.ts
+│   │   └── responseFormatter.ts
 │   ├── enums/               # Énumérations TypeScript
-│   └── prisma/              # Configuration Prisma
+│   │   ├── Role.ts
+│   │   ├── ContractType.ts
+│   │   └── PaymentMethod.ts
+│   └── prisma/              # Configuration base de données
+│       ├── client.ts
+│       └── seed.ts
 ├── tests/
-│   ├── unit/                # Tests unitaires
-│   └── integration/         # Tests d'intégration
-├── uploads/                 # Fichiers uploadés (photos, PDFs)
-├── .github/workflows/       # CI/CD GitHub Actions
-├── Dockerfile               # Configuration Docker
-├── docker-compose.yml       # Orchestration des services
-├── package.json             # Dépendances et scripts
-└── tsconfig.json            # Configuration TypeScript
+│   ├── unit/                # Tests unitaires (Jest)
+│   └── integration/         # Tests d'intégration (Supertest)
+├── uploads/                 # Fichiers générés/uploadés
+│   ├── photos/
+│   ├── payslips/
+│   ├── qr_codes/
+│   └── receipts/
+└── screenshots/             # Captures d'écran documentation
 ```
-
-## 🚀 Déploiement
-
-### Variables d'environnement requises
-
-| Variable | Description | Exemple |
-|----------|-------------|---------|
-| `DATABASE_URL` | URL de connexion MySQL | `mysql://user:pass@host:3306/db` |
-| `JWT_SECRET` | Clé secrète pour JWT | `super-secret-key` |
-| `NODE_ENV` | Environnement | `production` |
-| `EMAIL_HOST` | Serveur SMTP | `smtp.gmail.com` |
-| `EMAIL_USER` | Email expéditeur | `noreply@company.com` |
-| `EMAIL_PASS` | Mot de passe email | `app-password` |
-
-### Déploiement avec Docker
-
-```bash
-# Construction de l'image
-docker build -t payroll-backend .
-
-# Lancement du conteneur
-docker run -p 3000:3000 --env-file .env payroll-backend
-```
-
-### Déploiement sur Render
-
-Le projet est configuré pour un déploiement facile sur Render avec le fichier `render.yaml`.
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Veuillez suivre ces étapes :
-
-1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Pushez vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-### Standards de code
-
-- Utilisez ESLint pour le linting : `npm run lint`
-- Respectez les conventions TypeScript
-- Ajoutez des tests pour les nouvelles fonctionnalités
-- Mettez à jour la documentation si nécessaire
-
-## 📄 Licence
-
-Ce projet est sous licence ISC. Voir le fichier [`LICENSE`](./LICENSE) pour plus de détails.
-
-## 📞 Contact
-
-Pour toute question ou suggestion :
-
-- **Email** : votre-email@domaine.com
-- **GitHub Issues** : [Créer une issue](https://github.com/votre-repo/issues)
-- **Documentation API** : `http://localhost:3000/api-docs`
 
 ---
 
-⭐ Si ce projet vous plaît, n'hésitez pas à lui donner une étoile !
+## 📊 Schéma des Données
+
+### Entités Principales
+
+#### 🏢 Company (Entreprise)
+- **id**: Identifiant unique
+- **name**: Nom de l'entreprise
+- **address**: Adresse physique
+- **currency**: Devise (XOF par défaut)
+- **payPeriodType**: Période de paie (MONTHLY/WEEKLY/DAILY)
+
+#### 👤 User (Utilisateur)
+- **id**: Identifiant unique
+- **email**: Email unique
+- **password**: Mot de passe hashé
+- **fullName**: Nom complet
+- **role**: Rôle (SUPER_ADMIN/ADMIN/CASHIER/EMPLOYEE)
+- **companyId**: Référence entreprise (null pour super-admin)
+
+#### 👷 Employee (Employé)
+- **id**: Identifiant unique
+- **companyId**: Référence entreprise
+- **firstName/lastName**: Nom complet
+- **contractType**: Type de contrat (CDI/CDD/HONORAIRE/JOURNALIER)
+- **salary**: Salaire (mensuel pour CDI/CDD, taux/jour pour journalier)
+- **photos**: Chemin vers photo de profil
+- **attendanceCount**: Nombre total de pointages
+
+#### 💰 PayRun (Cycle de Paie)
+- **id**: Identifiant unique
+- **companyId**: Référence entreprise
+- **type**: Type de cycle (MONTHLY/WEEKLY/DAILY)
+- **periodStart/End**: Période couverte
+- **status**: Statut (DRAFT/APPROVED/CLOSED)
+- **totalGross/Net**: Totaux calculés
+
+#### 📄 Payslip (Bulletin de Salaire)
+- **id**: Identifiant unique
+- **payRunId**: Référence cycle de paie
+- **employeeId**: Référence employé
+- **gross/deductions/netPayable**: Montants calculés
+- **status**: Statut (PENDING/PARTIAL/PAID/LOCKED)
+- **pdfPath**: Chemin vers PDF généré
+
+#### 💳 Payment (Paiement)
+- **id**: Identifiant unique
+- **companyId**: Référence entreprise
+- **payslipId**: Référence bulletin (optionnel)
+- **amount**: Montant payé
+- **method**: Méthode (CASH/BANK_TRANSFER/ORANGE_MONEY/WAVE)
+- **receiptPath**: Chemin vers reçu PDF
+
+### Relations
+- **Company** 1:N **User** (Une entreprise a plusieurs utilisateurs)
+- **Company** 1:N **Employee** (Une entreprise a plusieurs employés)
+- **Company** 1:N **PayRun** (Une entreprise a plusieurs cycles de paie)
+- **PayRun** 1:N **Payslip** (Un cycle génère plusieurs bulletins)
+- **Employee** 1:N **Payslip** (Un employé a plusieurs bulletins)
+- **Payslip** 1:N **Payment** (Un bulletin peut avoir plusieurs paiements partiels)
+
+---
+
+## 📡 Routes API
+
+| Méthode | Endpoint | Description | Authentification |
+|---------|----------|-------------|------------------|
+| **POST** | `/api/auth/login` | Connexion utilisateur | ❌ Public |
+| **POST** | `/api/auth/register` | Inscription (admin uniquement) | ✅ JWT |
+| **GET** | `/api/auth/me` | Profil utilisateur connecté | ✅ JWT |
+| **GET** | `/api/companies` | Liste des entreprises | ✅ JWT (Super-admin) |
+| **POST** | `/api/companies` | Créer une entreprise | ✅ JWT (Super-admin) |
+| **GET** | `/api/employees` | Liste des employés | ✅ JWT |
+| **POST** | `/api/employees` | Créer un employé | ✅ JWT (Admin+) |
+| **PUT** | `/api/employees/:id` | Modifier un employé | ✅ JWT (Admin+) |
+| **DELETE** | `/api/employees/:id` | Supprimer un employé | ✅ JWT (Admin+) |
+| **GET** | `/api/payruns` | Liste des cycles de paie | ✅ JWT |
+| **POST** | `/api/payruns` | Créer un cycle de paie | ✅ JWT (Admin+) |
+| **POST** | `/api/payruns/:id/generate-payslips` | Générer les bulletins | ✅ JWT (Admin+) |
+| **GET** | `/api/payslips` | Liste des bulletins | ✅ JWT |
+| **GET** | `/api/payslips/:id/pdf` | Télécharger PDF bulletin | ✅ JWT |
+| **GET** | `/api/payments` | Liste des paiements | ✅ JWT |
+| **POST** | `/api/payments` | Enregistrer un paiement | ✅ JWT (Cashier+) |
+| **GET** | `/api/dashboard/stats` | Statistiques tableau de bord | ✅ JWT |
+
+### Exemples de Requêtes
+
+#### 🔐 Connexion
+```bash
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@company.com",
+  "password": "securePassword123"
+}
+```
+
+**Réponse:**
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": 1,
+      "email": "admin@company.com",
+      "fullName": "Admin User",
+      "role": "ADMIN",
+      "companyId": 1
+    },
+    "tokens": {
+      "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+      "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+    }
+  }
+}
+```
+
+#### 👥 Créer un Employé
+```bash
+POST /api/employees
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "firstName": "Jean",
+  "lastName": "Dupont",
+  "email": "jean.dupont@company.com",
+  "contractType": "CDI",
+  "salary": 45000,
+  "companyId": 1
+}
+```
+
+#### 💰 Créer un Cycle de Paie
+```bash
+POST /api/payruns
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "type": "MONTHLY",
+  "periodStart": "2024-01-01T00:00:00.000Z",
+  "periodEnd": "2024-01-31T23:59:59.000Z",
+  "companyId": 1
+}
+```
+
+---
+
+## 📚 Swagger / OpenAPI
+
+L'API est entièrement documentée avec Swagger UI, accessible à l'adresse : [https://backend-gestion-salaire.onrender.com/api-docs](https://backend-gestion-salaire.onrender.com/api-docs)
+
+### Captures d'Écran
+
+#### Interface de Connexion
+![Interface de connexion](screenshots/iqpres%20connection.png)
+
+#### Liste des Endpoints
+![Liste des endpoints](screenshots/liste%20des%20endpoints.png)
+
+#### Détails des Méthodes
+![Détails des méthodes](screenshots/methode%20des%20end%20point.png)
+
+### Fonctionnalités Swagger
+- **Documentation interactive** : Test des endpoints directement depuis l'interface
+- **Schémas détaillés** : Structure complète des objets JSON
+- **Authentification intégrée** : Support du Bearer Token
+- **Exemples de requêtes** : Payloads pré-remplis
+- **Réponses typées** : Codes HTTP et structures de réponse
+
+---
+
+## ⚙️ Installation et Lancement
+
+### Prérequis
+- **Node.js** >= 18.0.0
+- **npm** >= 8.0.0 ou **yarn** >= 1.22.0
+- **PostgreSQL** >= 15.0 (local ou cloud comme Neon)
+- **Git** pour le clonage
+
+### 1. Clonage du Dépôt
+```bash
+git clone https://github.com/KalidouGUISSE/backend-Gestion-Salaire.git
+cd backend-Gestion-Salaire
+```
+
+### 2. Installation des Dépendances
+```bash
+npm install
+```
+
+### 3. Configuration des Variables d'Environnement
+```bash
+cp .env.example .env
+```
+
+Éditez le fichier `.env` :
+```env
+# Base de données PostgreSQL (exemple avec Neon)
+DATABASE_URL="postgresql://username:password@host:5432/database"
+
+# JWT et sécurité
+JWT_SECRET="votre-cle-secrete-jwt-super-secure-ici"
+ACCESS_SECRET="cle-pour-access-token"
+REFRESH_SECRET="cle-pour-refresh-token"
+
+# Email (pour notifications)
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT="587"
+EMAIL_USER="votre-email@gmail.com"
+EMAIL_PASS="votre-mot-de-passe-application"
+
+# Application
+NODE_ENV="development"
+PORT=3000
+BaseUrl="http://localhost:3000"
+```
+
+### 4. Configuration de la Base de Données
+```bash
+# Appliquer les migrations Prisma
+npx prisma migrate dev --name init
+
+# Alimenter avec des données de test
+npx prisma db seed
+```
+
+### 5. Lancement en Développement
+```bash
+npm run dev
+```
+
+L'API sera accessible sur : `http://localhost:3000`  
+Documentation Swagger : `http://localhost:3000/api-docs`
+
+### 6. Tests
+```bash
+# Tests unitaires
+npm test
+
+# Tests d'intégration
+npm run test:api
+
+# Tests avec couverture
+npm run test:coverage
+```
+
+---
+
+## 🏆 Choix Techniques & Bonnes Pratiques
+
+### Architecture en Couches
+**Pourquoi ?** Séparation des responsabilités pour une maintenabilité optimale
+- **Routes** : Mapping HTTP vers contrôleurs
+- **Contrôleurs** : Gestion des requêtes/réponses HTTP
+- **Services** : Logique métier et orchestration
+- **Repositories** : Abstraction de l'accès données
+
+### Validation Rigoureuse
+**Zod schemas** pour validation des entrées :
+- **Sécurité** : Prévention des injections et données malformées
+- **DX** : Inférence automatique des types TypeScript
+- **Performance** : Validation côté serveur avant traitement
+
+### Gestion d'Erreurs Unifiée
+**Middleware d'erreur centralisé** :
+- **Consistency** : Format uniforme des réponses d'erreur
+- **Logging** : Traçabilité des erreurs en production
+- **Sécurité** : Masquage des détails sensibles
+
+### Sécurité Renforcée
+- **Bcrypt** pour le hashage des mots de passe
+- **Helmet** pour les headers de sécurité HTTP
+- **CORS** configuré restrictivement
+- **Rate limiting** pour prévention des attaques par déni de service
+- **Joi/Zod** pour validation des entrées
+
+### Qualité du Code
+- **SOLID Principles** : Principes de conception orientée objet
+- **DRY (Don't Repeat Yourself)** : Réutilisation du code
+- **ESLint + Prettier** : Standards de code consistants
+- **Tests unitaires + intégration** : Couverture > 80%
+
+### Performance
+- **Prisma query optimization** : Requêtes optimisées et lazy loading
+- **File upload streaming** : Gestion efficace des gros fichiers
+- **PDF generation async** : Non-bloquant avec Puppeteer
+- **Database indexing** : Optimisation des requêtes fréquentes
+
+---
+
+## 🚀 Améliorations Futures
+
+### Fonctionnalités Prévues
+- **API GraphQL** : Alternative plus flexible à REST
+- **Microservices** : Décomposition en services indépendants
+- **Cache Redis** : Accélération des requêtes fréquentes
+- **WebSockets** : Notifications temps réel
+- **Multi-tenant avancé** : Base de données par tenant
+- **IA/ML** : Prédiction des coûts salariaux
+
+### Améliorations Techniques
+- **Migration vers Fastify** : Framework plus performant
+- **Containerisation avancée** : Kubernetes orchestration
+- **Monitoring avancé** : Prometheus + Grafana
+- **CI/CD complet** : Tests automatisés + déploiement
+- **API versioning** : Gestion des versions d'API
+- **Internationalisation** : Support multi-langues
+
+### Performance & Scalabilité
+- **Database sharding** : Partitionnement horizontal
+- **CDN integration** : Accélération globale
+- **Load balancing** : Distribution de charge
+- **Database replication** : Haute disponibilité
+
+---
+
+## 👨‍💻 Auteur
+
+**Kalidou Guissé**  
+*Développeur Backend Senior*
+
+- **GitHub** : [https://github.com/KalidouGUISSE](https://github.com/KalidouGUISSE)
+- **LinkedIn** : [Votre profil LinkedIn]
+- **Email** : kalidouguisse16@gmail.com
+
+### Expertise
+- Développement backend Node.js/TypeScript
+- Architecture d'APIs REST et GraphQL
+- Bases de données PostgreSQL et MongoDB
+- DevOps et déploiement cloud
+- Méthodologies Agiles et gestion de projet
+
+---
+
+⭐ **Si ce projet vous inspire, n'hésitez pas à lui donner une étoile sur GitHub !**
+
+*Construit avec ❤️ pour simplifier la gestion des salaires en Afrique.*
