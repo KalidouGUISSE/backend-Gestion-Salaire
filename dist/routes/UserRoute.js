@@ -2,6 +2,47 @@ import { Router } from "express";
 import { UserController } from "../controllers/UserController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = Router();
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Obtenir un utilisateur par ID
+ *     tags: [Utilisateurs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l'utilisateur
+ *     responses:
+ *       200:
+ *         description: Utilisateur trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: 1
+ *                 email: "admin@company.com"
+ *                 fullName: "Admin User"
+ *                 role: "ADMIN"
+ *                 companyId: 1
+ *                 isActive: true
+ *                 createdAt: "2024-01-01T00:00:00.000Z"
+ *                 updatedAt: "2024-01-01T00:00:00.000Z"
+ *       404:
+ *         description: Utilisateur non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get("/:id", UserController.findById);
 // Appliquer authMiddleware à toutes les routes
 router.use(authMiddleware);
 /**
@@ -56,47 +97,6 @@ router.use(authMiddleware);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/", UserController.getAll);
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     summary: Obtenir un utilisateur par ID
- *     tags: [Utilisateurs]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID de l'utilisateur
- *     responses:
- *       200:
- *         description: Utilisateur trouvé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *             example:
- *               success: true
- *               data:
- *                 id: 1
- *                 email: "admin@company.com"
- *                 fullName: "Admin User"
- *                 role: "ADMIN"
- *                 companyId: 1
- *                 isActive: true
- *                 createdAt: "2024-01-01T00:00:00.000Z"
- *                 updatedAt: "2024-01-01T00:00:00.000Z"
- *       404:
- *         description: Utilisateur non trouvé
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get("/:id", UserController.findById);
 /**
  * @swagger
  * /users:
