@@ -504,6 +504,16 @@ npm run test:coverage
 - **LinkedIn** : [Votre profil LinkedIn]
 - **Email** : kalidouguisse16@gmail.com
 
+## 🧪 Swagger – Captures d’écran
+
+### Vue générale
+![Swagger UI – Overview](screenshots/swagger-overview.png)
+
+### Exemple d’endpoint
+![Swagger UI – Endpoint](screenshots/swagger-endpoints.png)
+![Swagger UI – Endpoint](screenshots/swagger-endpoint.png)
+
+
 ### Expertise
 - Développement backend Node.js/TypeScript
 - Architecture d'APIs REST et GraphQL
