@@ -333,13 +333,13 @@ L'API est entièrement documentée avec Swagger UI, accessible à l'adresse : [h
 ### Captures d'Écran
 
 #### Interface de Connexion
-![Interface de connexion](screenshots/iqpres%20connection.png)
+![Swagger UI – Endpoint](screenshots/swagger-endpoint.png)
 
 #### Liste des Endpoints
-![Liste des endpoints](screenshots/liste%20des%20endpoints.png)
+![Swagger UI – Endpoint](screenshots/swagger-endpoints.png)
 
 #### Détails des Méthodes
-![Détails des méthodes](screenshots/methode%20des%20end%20point.png)
+![Swagger UI – Overview](screenshots/swagger-overview.png)
 
 ### Fonctionnalités Swagger
 - **Documentation interactive** : Test des endpoints directement depuis l'interface
@@ -498,20 +498,11 @@ npm run test:coverage
 ## 👨‍💻 Auteur
 
 **Kalidou Guissé**  
-*Développeur Backend Senior*
+*Développeur Backend*
 
 - **GitHub** : [https://github.com/KalidouGUISSE](https://github.com/KalidouGUISSE)
 - **LinkedIn** : [Votre profil LinkedIn]
 - **Email** : kalidouguisse16@gmail.com
-
-## 🧪 Swagger – Captures d’écran
-
-### Vue générale
-![Swagger UI – Overview](screenshots/swagger-overview.png)
-
-### Exemple d’endpoint
-![Swagger UI – Endpoint](screenshots/swagger-endpoints.png)
-![Swagger UI – Endpoint](screenshots/swagger-endpoint.png)
 
 
 ### Expertise
